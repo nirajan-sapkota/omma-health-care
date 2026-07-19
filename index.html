@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omma Health Center — Vision & Hearing Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --navy:#0b2545;
+  --blue-900:#0e3a72;
+  --blue-700:#1668dc;
+  --blue-600:#2b7bf2;
+  --blue-400:#7cb3ff;
+  --blue-200:#c7e0ff;
+  --blue-100:#eaf3ff;
+  --blue-50:#f5f9ff;
+  --white:#ffffff;
+  --ink:#0b2545;
+  --ink-soft:#4a5c7a;
+  --ok:#1a9e6b;
+  --warn:#e0562f;
+  --ring: 0 0 0 3px rgba(22,104,220,0.28);
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(11,37,69,0.10);
+  --shadow-lg: 0 20px 50px rgba(11,37,69,0.16);
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--white);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display); margin:0 0 .4em 0; color:var(--navy); letter-spacing:-0.01em;}
+p{line-height:1.6; color:var(--ink-soft); margin:0 0 1em 0;}
+a{color:inherit;}
+button{font-family:var(--font-body); cursor:pointer;}
+:focus-visible{outline:3px solid var(--blue-600); outline-offset:2px;}
+.container{max-width:1120px; margin:0 auto; padding:0 24px;}
+.hidden{display:none !important;}
+
+/* ============ TOPBAR / IRIS SIGNATURE ============ */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--blue-100);
+}
+.topbar-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1120px; margin:0 auto;}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:700; font-size:1.25rem; color:var(--navy);}
+.brand .iris{width:34px; height:34px; flex:0 0 auto;}
+.brand .iris .pupil{animation:blink 6s ease-in-out infinite;}
+@keyframes blink{0%,92%,100%{transform:scaleY(1);} 95%{transform:scaleY(0.15);}}
+nav.mainnav{display:flex; gap:4px; flex-wrap:wrap;}
+nav.mainnav button{
+  background:transparent; border:none; padding:9px 14px; border-radius:999px;
+  font-weight:600; font-size:0.88rem; color:var(--blue-900);
+}
+nav.mainnav button:hover{background:var(--blue-100);}
+nav.mainnav button.active{background:var(--blue-700); color:#fff;}
+.patient-chip{
+  font-size:0.78rem; background:var(--blue-50); border:1px solid var(--blue-200);
+  padding:6px 12px; border-radius:999px; color:var(--blue-900); font-weight:600;
+  display:flex; align-items:center; gap:8px;
+}
+
+/* ============ SECTIONS ============ */
+section.view{padding:56px 0 80px;}
+section.view.compact{padding-top:36px;}
+
+/* ============ HERO ============ */
+.hero{
+  background:
+    radial-gradient(circle at 85% -10%, var(--blue-200) 0%, transparent 45%),
+    linear-gradient(180deg, var(--blue-50) 0%, #ffffff 70%);
+  padding:64px 0 40px;
+  border-bottom:1px solid var(--blue-100);
+}
+.hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:0.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--blue-700); background:var(--blue-100); padding:6px 12px; border-radius:999px; margin-bottom:16px;
+}
+.hero h1{font-size:2.6rem; line-height:1.08; margin-bottom:16px;}
+.hero p.lead{font-size:1.08rem; max-width:46ch;}
+.cta-row{display:flex; gap:12px; margin-top:22px; flex-wrap:wrap;}
+.btn{
+  border:none; padding:13px 22px; border-radius:10px; font-weight:600; font-size:0.95rem;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn-primary{background:var(--blue-700); color:#fff; box-shadow:0 8px 20px rgba(22,104,220,0.28);}
+.btn-primary:hover{background:var(--navy); transform:translateY(-1px);}
+.btn-outline{background:#fff; color:var(--blue-700); border:1.5px solid var(--blue-200);}
+.btn-outline:hover{border-color:var(--blue-700); background:var(--blue-50);}
+.btn-ghost{background:transparent; color:var(--blue-700); padding:10px 6px;}
+.btn-ghost:hover{text-decoration:underline;}
+.btn-sm{padding:8px 14px; font-size:0.85rem; border-radius:8px;}
+.btn:disabled{opacity:.5; cursor:not-allowed; transform:none !important;}
+
+.hero-visual{position:relative; display:flex; align-items:center; justify-content:center;}
+.snellen-card{
+  background:var(--navy); color:#fff; border-radius:20px; padding:30px 26px;
+  box-shadow:var(--shadow-lg); width:100%; max-width:360px;
+}
+.snellen-card .row{font-family:var(--font-display); text-align:center; letter-spacing:0.2em; color:#eaf3ff;}
+.snellen-card .row:nth-child(1){font-size:2.6rem; margin-bottom:14px;}
+.snellen-card .row:nth-child(2){font-size:2.0rem; margin-bottom:12px; opacity:.9;}
+.snellen-card .row:nth-child(3){font-size:1.5rem; margin-bottom:10px; opacity:.8;}
+.snellen-card .row:nth-child(4){font-size:1.05rem; margin-bottom:8px; opacity:.65;}
+.snellen-card .row:nth-child(5){font-size:0.75rem; opacity:.5;}
+.snellen-caption{text-align:center; font-size:.72rem; color:var(--blue-300, #9fc6ff); margin-top:16px; letter-spacing:.05em;}
+
+/* service cards */
+.services{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:48px;}
+.svc-card{
+  background:#fff; border:1px solid var(--blue-100); border-radius:var(--radius);
+  padding:24px 20px; box-shadow:var(--shadow); transition:transform .15s ease, box-shadow .15s ease;
+  text-align:left;
+}
+.svc-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-lg);}
+.svc-card .ico{width:44px; height:44px; border-radius:10px; background:var(--blue-100); display:flex; align-items:center; justify-content:center; margin-bottom:14px;}
+.svc-card h3{font-size:1.05rem; margin-bottom:6px;}
+.svc-card p{font-size:0.88rem; margin-bottom:14px;}
+
+/* ============ FORM ELEMENTS ============ */
+.panel{background:#fff; border:1px solid var(--blue-100); border-radius:var(--radius); box-shadow:var(--shadow); padding:32px;}
+.field{margin-bottom:18px;}
+.field label{display:block; font-weight:600; font-size:0.85rem; margin-bottom:6px; color:var(--navy);}
+.field input, .field select, .field textarea{
+  width:100%; padding:11px 13px; border-radius:9px; border:1.5px solid var(--blue-200);
+  font-size:0.95rem; font-family:var(--font-body); color:var(--ink); background:#fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus{border-color:var(--blue-600); box-shadow:var(--ring); outline:none;}
+.field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+.section-title{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:10px;}
+.section-title .tag{font-size:0.75rem; font-weight:700; color:var(--blue-700); text-transform:uppercase; letter-spacing:.07em; background:var(--blue-100); padding:5px 10px; border-radius:999px;}
+
+/* stepper */
+.stepper{display:flex; gap:8px; margin-bottom:26px;}
+.stepper .dot{flex:1; height:5px; border-radius:99px; background:var(--blue-100);}
+.stepper .dot.done{background:var(--blue-700);}
+
+/* result / alert boxes */
+.result-box{border-radius:12px; padding:20px 22px; margin-top:18px; border:1.5px solid var(--blue-200); background:var(--blue-50);}
+.result-box.good{border-color:#bfe8d6; background:#f1fbf6;}
+.result-box.warn{border-color:#f6cdb9; background:#fdf3ee;}
+.result-box h4{margin-bottom:8px;}
+.meet-link-box{
+  display:flex; align-items:center; gap:12px; background:var(--navy); color:#fff; border-radius:12px;
+  padding:16px 18px; margin-top:16px; flex-wrap:wrap;
+}
+.meet-link-box code{background:rgba(255,255,255,0.12); padding:8px 12px; border-radius:8px; font-size:0.9rem; flex:1; min-width:200px; word-break:break-all;}
+
+/* colorblind plate */
+.plate-wrap{display:flex; flex-direction:column; align-items:center; gap:20px;}
+.plate-circle{width:260px; height:260px; border-radius:50%; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,0.04);}
+.answer-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-width:420px;}
+.answer-grid button{padding:10px; border-radius:9px; border:1.5px solid var(--blue-200); background:#fff; font-weight:600;}
+.answer-grid button:hover{border-color:var(--blue-700); background:var(--blue-50);}
+.answer-grid button.selected{background:var(--blue-700); color:#fff; border-color:var(--blue-700);}
+
+/* hearing test */
+.freq-card{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border:1.5px solid var(--blue-100); border-radius:12px; margin-bottom:10px;}
+.freq-card .meta{font-weight:600; color:var(--navy);}
+.freq-card .sub{font-size:0.8rem; color:var(--ink-soft); font-weight:400;}
+.pill{font-size:0.72rem; font-weight:700; padding:4px 10px; border-radius:999px;}
+.pill.wait{background:var(--blue-100); color:var(--blue-700);}
+.pill.heard{background:#e0f6ea; color:var(--ok);}
+.pill.missed{background:#fdeae2; color:var(--warn);}
+
+/* doctor dashboard */
+.doctor-shell{display:grid; grid-template-columns:280px 1fr; gap:24px;}
+.patient-list{border:1px solid var(--blue-100); border-radius:var(--radius); overflow:hidden; background:#fff; height:fit-content;}
+.patient-list .item{padding:14px 16px; border-bottom:1px solid var(--blue-50); cursor:pointer; font-size:0.88rem;}
+.patient-list .item:hover{background:var(--blue-50);}
+.patient-list .item.active{background:var(--blue-700); color:#fff;}
+.patient-list .item .name{font-weight:700; display:block;}
+.patient-list .item .when{font-size:0.75rem; opacity:0.75;}
+.slide-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+.slide-dots{display:flex; gap:6px;}
+.slide-dots span{width:8px; height:8px; border-radius:50%; background:var(--blue-100);}
+.slide-dots span.on{background:var(--blue-700);}
+.slide-card{border:1px solid var(--blue-100); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow); min-height:340px;}
+.data-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px;}
+.data-block{background:var(--blue-50); border-radius:10px; padding:16px;}
+.data-block .k{font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--blue-700); font-weight:700; margin-bottom:4px;}
+.data-block .v{font-weight:600; color:var(--navy);}
+.empty-state{text-align:center; padding:60px 20px; color:var(--ink-soft);}
+.empty-state .ico{font-size:2.2rem; margin-bottom:10px;}
+
+footer{background:var(--navy); color:#c7e0ff; padding:34px 0; margin-top:40px;}
+footer .container{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:0.85rem;}
+footer a{color:#fff; text-decoration:none;}
+
+@media (max-width:880px){
+  .hero-grid{grid-template-columns:1fr;}
+  .services{grid-template-columns:repeat(2,1fr);}
+  .field-row{grid-template-columns:1fr;}
+  .doctor-shell{grid-template-columns:1fr;}
+  nav.mainnav{display:none;}
+  nav.mainnav.open{display:flex; flex-direction:column; position:absolute; top:64px; left:0; right:0; background:#fff; padding:12px; box-shadow:var(--shadow-lg); border-radius:0 0 14px 14px;}
+  .menu-toggle{display:block !important;}
+}
+.menu-toggle{display:none; background:var(--blue-100); border:none; padding:10px 12px; border-radius:9px; font-size:1.1rem;}
+</style>
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <svg class="iris" viewBox="0 0 40 40"><path d="M2 20C2 20 10 6 20 6C30 6 38 20 38 20C38 20 30 34 20 34C10 34 2 20 2 20Z" fill="#eaf3ff" stroke="#1668dc" stroke-width="2"/><circle class="pupil" cx="20" cy="20" r="7" fill="#0b2545"/><circle cx="17.5" cy="17" r="2" fill="#fff"/></svg>
+      Omma Health Center
+    </div>
+    <button class="menu-toggle" onclick="document.querySelector('nav.mainnav').classList.toggle('open')">☰</button>
+    <nav class="mainnav" id="mainnav">
+      <button data-view="home" onclick="showView('home')">Home</button>
+      <button data-view="booking" onclick="showView('booking')">Book Doctor</button>
+      <button data-view="eye" onclick="showView('eye')">Eye Test</button>
+      <button data-view="colorblind" onclick="showView('colorblind')">Colour Test</button>
+      <button data-view="hearing" onclick="showView('hearing')">Hearing Test</button>
+      <button data-view="doctor" onclick="showView('doctor')">Doctor Login</button>
+    </nav>
+    <div class="patient-chip" id="patientChip"></div>
+  </div>
+</div>
+
+<!-- ============ HOME ============ -->
+<section class="view" id="view-home">
+  <div class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Omma · Greek for "eye"</span>
+        <h1>Vision, hearing &amp; doctor care, tested and booked in one place.</h1>
+        <p class="lead">Take a free eye, colour‑vision and hearing screening in your browser, then book a video consultation with our doctor — you'll get a unique meeting link instantly.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="showView('booking')">Book an appointment</button>
+          <button class="btn btn-outline" onclick="showView('eye')">Start a free test</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="snellen-card">
+          <div class="row">O M M A</div>
+          <div class="row">E F P T</div>
+          <div class="row">D E C F P</div>
+          <div class="row">L E F O D P C T</div>
+          <div class="row">F E L O P Z D</div>
+          <div class="snellen-caption">SNELLEN‑STYLE ACUITY CHART · SAMPLE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="services">
+      <div class="svc-card">
+        <div class="ico">👁️</div>
+        <h3>Eye Test</h3>
+        <p>A quick Snellen‑style acuity check to estimate how clearly you're seeing today.</p>
+        <button class="btn btn-ghost" onclick="showView('eye')">Take test →</button>
+      </div>
+      <div class="svc-card">
+        <div class="ico">🎨</div>
+        <h3>Colourblindness Test</h3>
+        <p>Ishihara‑style plates that screen for red‑green colour vision deficiency.</p>
+        <button class="btn btn-ghost" onclick="showView('colorblind')">Take test →</button>
+      </div>
+      <div class="svc-card">
+        <div class="ico">👂</div>
+        <h3>Hearing Test</h3>
+        <p>Tone‑based screening across frequencies for each ear, right in your browser.</p>
+        <button class="btn btn-ghost" onclick="showView('hearing')">Take test →</button>
+      </div>
+      <div class="svc-card">
+        <div class="ico">🩺</div>
+        <h3>Doctor Video Visit</h3>
+        <p>Book a slot and receive a unique video‑call link to meet your doctor.</p>
+        <button class="btn btn-ghost" onclick="showView('booking')">Book now →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOKING ============ -->
+<section class="view compact hidden" id="view-booking">
+  <div class="container" style="max-width:640px;">
+    <div class="section-title"><h2>Book a doctor appointment</h2><span class="tag">Video visit</span></div>
+    <div class="panel">
+      <div class="field">
+        <label for="bName">Full name</label>
+        <input id="bName" type="text" placeholder="e.g. Aarav Sharma">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="bDate">Preferred date</label>
+          <input id="bDate" type="date">
+        </div>
+        <div class="field">
+          <label for="bTime">Preferred time</label>
+          <input id="bTime" type="time">
+        </div>
+      </div>
+      <div class="field">
+        <label for="bReason">Reason for visit</label>
+        <select id="bReason">
+          <option>General eye check‑up</option>
+          <option>Colour vision concern</option>
+          <option>Hearing concern</option>
+          <option>Follow‑up consultation</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="bNotes">Notes for the doctor (optional)</label>
+        <textarea id="bNotes" rows="3" placeholder="Anything the doctor should know beforehand"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="createBooking()">Confirm appointment</button>
+      <div id="bookingResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EYE TEST ============ -->
+<section class="view compact hidden" id="view-eye">
+  <div class="container" style="max-width:640px;">
+    <div class="section-title"><h2>Eye acuity test</h2><span class="tag">Snellen style</span></div>
+    <div class="panel">
+      <p>Sit about an arm's length from your screen. Starting from the top, read each row out loud (or to yourself) and choose the <strong>smallest row you can read comfortably and clearly</strong>.</p>
+      <div id="eyeChart" style="background:var(--navy); border-radius:14px; padding:26px; margin:18px 0;">
+        <div class="row" style="font-family:var(--font-display); text-align:center; color:#eaf3ff; font-size:3.2rem; letter-spacing:.15em; margin-bottom:16px;" data-line="1">E F P</div>
+        <div class="row" style="font-family:var(--font-display); text-align:center; color:#eaf3ff; font-size:2.4rem; letter-spacing:.15em; margin-bottom:14px; opacity:.92" data-line="2">T O Z L</div>
+        <div class="row" style="font-family:var(--font-display); text-align:center; color:#eaf3ff; font-size:1.7rem; letter-spacing:.15em; margin-bottom:12px; opacity:.85" data-line="3">P E C F D</div>
+        <div class="row" style="font-family:var(--font-display); text-align:center; color:#eaf3ff; font-size:1.2rem; letter-spacing:.15em; margin-bottom:10px; opacity:.75" data-line="4">E D F C Z P</div>
+        <div class="row" style="font-family:var(--font-display); text-align:center; color:#eaf3ff; font-size:0.85rem; letter-spacing:.15em; opacity:.6" data-line="5">F E L O P Z D</div>
+      </div>
+      <div class="field">
+        <label for="eyeLine">Smallest line you can read clearly</label>
+        <select id="eyeLine">
+          <option value="5">Line 5 (smallest) — excellent acuity</option>
+          <option value="4">Line 4 — good acuity</option>
+          <option value="3">Line 3 — mild difficulty</option>
+          <option value="2">Line 2 — noticeable difficulty</option>
+          <option value="1">Line 1 (largest only) — significant difficulty</option>
+          <option value="0">Can't read line 1 clearly</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="eyeEye">Which eye(s) were you testing?</label>
+        <select id="eyeEye">
+          <option>Both eyes</option>
+          <option>Left eye only</option>
+          <option>Right eye only</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="submitEyeTest()">See my result</button>
+      <div id="eyeResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COLORBLINDNESS TEST ============ -->
+<section class="view compact hidden" id="view-colorblind">
+  <div class="container" style="max-width:640px;">
+    <div class="section-title"><h2>Colourblindness screening</h2><span class="tag">Ishihara style</span></div>
+    <div class="panel">
+      <div class="stepper" id="cbStepper"></div>
+      <div class="plate-wrap">
+        <svg class="plate-circle" id="cbPlate" viewBox="0 0 200 200"></svg>
+        <p style="margin:0; font-weight:600; color:var(--navy);" id="cbQuestion">What number do you see?</p>
+        <div class="answer-grid" id="cbAnswers"></div>
+        <button class="btn btn-ghost" id="cbCantSee" onclick="answerPlate('none')">I can't see a number</button>
+      </div>
+      <div id="cbResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HEARING TEST ============ -->
+<section class="view compact hidden" id="view-hearing">
+  <div class="container" style="max-width:640px;">
+    <div class="section-title"><h2>Hearing test</h2><span class="tag">Tone screening</span></div>
+    <div class="panel">
+      <p>Put on headphones and lower your volume to a comfortable level. We'll play a short tone in one ear at a time across several frequencies — tap <strong>I heard it</strong> only if you genuinely hear a sound.</p>
+      <div id="hearingList"></div>
+      <button class="btn btn-primary" id="hearingSubmitBtn" onclick="submitHearingTest()" disabled>See my result</button>
+      <div id="hearingResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOCTOR DASHBOARD ============ -->
+<section class="view compact hidden" id="view-doctor">
+  <div class="container">
+    <div id="doctorLoginPanel" style="max-width:420px; margin:0 auto;">
+      <div class="section-title"><h2>Doctor login</h2><span class="tag">Staff only</span></div>
+      <div class="panel">
+        <p>Demo access — enter the doctor passcode to view patient bookings and test results.</p>
+        <div class="field">
+          <label for="docPass">Passcode</label>
+          <input id="docPass" type="password" placeholder="Hint: omma123">
+        </div>
+        <button class="btn btn-primary" onclick="doctorLogin()">Enter dashboard</button>
+        <p id="docLoginError" style="color:var(--warn); font-weight:600; font-size:0.85rem; display:none; margin-top:10px;">Incorrect passcode. Try again.</p>
+      </div>
+    </div>
+
+    <div id="doctorDashboard" class="hidden">
+      <div class="section-title">
+        <h2>Patient overview</h2>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="tag" id="docPatientCount">0 patients</span>
+          <button class="btn btn-outline btn-sm" onclick="doctorLogout()">Log out</button>
+        </div>
+      </div>
+      <div class="doctor-shell">
+        <div class="patient-list" id="patientList"></div>
+        <div>
+          <div class="slide-nav">
+            <button class="btn btn-outline btn-sm" onclick="slidePrev()">← Prev card</button>
+            <div class="slide-dots" id="slideDots"></div>
+            <button class="btn btn-outline btn-sm" onclick="slideNext()">Next card →</button>
+          </div>
+          <div class="slide-card" id="slideCard"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div>© <span id="yr"></span> Omma Health Center — demo application, not a substitute for professional medical diagnosis.</div>
+    <div><a href="#" onclick="showView('booking'); return false;">Book an appointment</a></div>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEYS = { appts:'omma_appointments', results:'omma_results', patient:'omma_current_patient' };
+const DOCTOR_PASSCODE = 'omma123';
+
+function loadJSON(key, fallback){
+  try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; }
+}
+function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+
+let appointments = loadJSON(STORAGE_KEYS.appts, []);
+let results = loadJSON(STORAGE_KEYS.results, {}); // keyed by patient name -> {eye, colorblind, hearing}
+let currentPatient = localStorage.getItem(STORAGE_KEYS.patient) || '';
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+function getOrAskName(){
+  if(currentPatient) return currentPatient;
+  const name = prompt("What's your name? (so we can attach this result to your record)");
+  if(name && name.trim()){
+    currentPatient = name.trim();
+    localStorage.setItem(STORAGE_KEYS.patient, currentPatient);
+  }
+  renderPatientChip();
+  return currentPatient;
+}
+
+function renderPatientChip(){
+  const chip = document.getElementById('patientChip');
+  if(currentPatient){
+    chip.innerHTML = '👤 ' + escapeHtml(currentPatient) + ' <button style="border:none;background:transparent;color:var(--blue-700);font-weight:700;cursor:pointer;" onclick="switchPatient()">switch</button>';
+  } else {
+    chip.innerHTML = '<button class="btn btn-ghost btn-sm" style="padding:2px 4px;" onclick="getOrAskName()">Set your name</button>';
+  }
+}
+function switchPatient(){
+  currentPatient = '';
+  localStorage.removeItem(STORAGE_KEYS.patient);
+  getOrAskName();
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function ensureResultBucket(name){
+  if(!results[name]) results[name] = {};
+  return results[name];
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showView(view){
+  document.querySelectorAll('section.view').forEach(s => s.classList.add('hidden'));
+  document.getElementById('view-'+view).classList.remove('hidden');
+  document.querySelectorAll('nav.mainnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  document.querySelector('nav.mainnav').classList.remove('open');
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(view === 'hearing') initHearingTest();
+  if(view === 'colorblind') initColorblindTest();
+  if(view === 'doctor') renderDoctorEntry();
+}
+renderPatientChip();
+
+/* ============================================================
+   UNIQUE MEETING LINK GENERATOR
+   ============================================================ */
+function randSeg(len){
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  let s = '';
+  for(let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)];
+  return s;
+}
+function generateMeetLink(){
+  return 'https://meet.google.com/' + randSeg(3) + '-' + randSeg(4) + '-' + randSeg(3);
+}
+function generateApptId(){
+  return 'OMMA-' + Date.now().toString(36).toUpperCase() + '-' + randSeg(4).toUpperCase();
+}
+
+/* ============================================================
+   BOOKING
+   ============================================================ */
+function createBooking(){
+  const name = document.getElementById('bName').value.trim();
+  const date = document.getElementById('bDate').value;
+  const time = document.getElementById('bTime').value;
+  const reason = document.getElementById('bReason').value;
+  const notes = document.getElementById('bNotes').value.trim();
+  const box = document.getElementById('bookingResult');
+
+  if(!name || !date || !time){
+    box.innerHTML = '<div class="result-box warn"><h4>Missing details</h4><p style="margin:0;">Please enter your name, date and time to confirm the appointment.</p></div>';
+    return;
+  }
+  currentPatient = name;
+  localStorage.setItem(STORAGE_KEYS.patient, name);
+  renderPatientChip();
+
+  const appt = {
+    id: generateApptId(),
+    name, date, time, reason, notes,
+    meetLink: generateMeetLink(),
+    createdAt: new Date().toISOString()
+  };
+  appointments.push(appt);
+  saveJSON(STORAGE_KEYS.appts, appointments);
+
+  box.innerHTML = `
+    <div class="result-box good">
+      <h4>Appointment confirmed ✔</h4>
+      <p style="margin:0;">${escapeHtml(name)}, you're booked for <strong>${date} at ${time}</strong> (${escapeHtml(reason)}). Reference: <strong>${appt.id}</strong>.</p>
+    </div>
+    <div class="meet-link-box">
+      <div>
+        <div style="font-size:0.75rem; opacity:.75; margin-bottom:4px;">Your unique video visit link</div>
+        <code>${appt.meetLink}</code>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('${appt.meetLink}').then(()=>this.textContent='Copied!')">Copy link</button>
+    </div>
+    <p style="margin-top:14px; font-size:0.8rem;">Note: this is a demo‑generated link in the Google Meet format. Save your appointment reference — your doctor will see your booking and test results in their dashboard.</p>
+  `;
+  document.getElementById('bName').value=''; document.getElementById('bDate').value='';
+  document.getElementById('bTime').value=''; document.getElementById('bNotes').value='';
+}
+
+/* ============================================================
+   EYE TEST
+   ============================================================ */
+function submitEyeTest(){
+  const name = getOrAskName();
+  if(!name) return;
+  const line = parseInt(document.getElementById('eyeLine').value,10);
+  const eyeTested = document.getElementById('eyeEye').value;
+  const scale = {5:'6/6 (normal)', 4:'6/9', 3:'6/12', 2:'6/18', 1:'6/36', 0:'6/60 or lower'};
+  const verdict = line >= 4 ? 'good' : (line >= 2 ? 'warn' : 'warn');
+  const advice = line >= 4
+    ? "Your reading suggests normal acuity today. Keep up routine annual checks."
+    : "Your reading suggests reduced acuity — consider booking a doctor visit for a full examination.";
+
+  ensureResultBucket(name).eye = { line, eyeTested, approxAcuity: scale[line], date: new Date().toISOString() };
+  saveJSON(STORAGE_KEYS.results, results);
+
+  document.getElementById('eyeResult').innerHTML = `
+    <div class="result-box ${verdict}">
+      <h4>Estimated acuity: ${scale[line]}</h4>
+      <p style="margin:0 0 10px 0;">Tested: ${eyeTested}. ${advice}</p>
+      <button class="btn btn-primary btn-sm" onclick="showView('booking')">Book a doctor visit</button>
+    </div>`;
+}
+
+/* ============================================================
+   COLORBLINDNESS TEST (Ishihara-style generated plates)
+   ============================================================ */
+// 5x7 dot-matrix digit shapes (1 = dot belongs to number)
+const DIGIT_SHAPES = {
+  '3':["01110","10001","00001","00110","00001","10001","01110"],
+  '5':["11111","10000","11110","00001","00001","10001","01110"],
+  '8':["01110","10001","10001","01110","10001","10001","01110"],
+  '6':["00111","01000","10000","11110","10001","10001","01110"],
+  '2':["01110","10001","00001","00010","00100","01000","11111"],
+  '7':["11111","00001","00010","00100","00100","00100","00100"]
+};
+const CB_PLATES = [
+  { digit:'8', figureColors:['#e8823c','#f0a35f','#d9701f'], groundColors:['#8fbf8f','#a3cf9e','#79ad78'] },
+  { digit:'3', figureColors:['#e05a4e','#ef8073','#c94436'], groundColors:['#7fae9a','#93c1ad','#6a9a87'] },
+  { digit:'5', figureColors:['#e79a4e','#f2b06d','#d1832f'], groundColors:['#8bb08a','#9ec49d','#799e78'] },
+  { digit:'6', figureColors:['#d96b6b','#e88989','#c65656'], groundColors:['#7ea48f','#93b8a3','#6c9280'] },
+  { digit:'2', figureColors:['#e2884a','#eea36c','#cc7635'], groundColors:['#84ab84','#9abf99','#729671'] }
+];
+let cbState = { order:[], idx:0, answers:[] };
+
+function initColorblindTest(){
+  cbState.order = [0,1,2,3,4];
+  cbState.idx = 0;
+  cbState.answers = [];
+  document.getElementById('cbResult').innerHTML = '';
+  renderPlate();
+}
+function renderStepper(){
+  const el = document.getElementById('cbStepper');
+  el.innerHTML = cbState.order.map((_,i) => `<div class="dot ${i < cbState.idx ? 'done':''}"></div>`).join('');
+}
+function renderPlate(){
+  renderStepper();
+  if(cbState.idx >= cbState.order.length){ finishColorblindTest(); return; }
+  const plateDef = CB_PLATES[cbState.order[cbState.idx]];
+  const shape = DIGIT_SHAPES[plateDef.digit];
+  const svg = document.getElementById('cbPlate');
+  svg.innerHTML = '';
+  const dots = [];
+  // background field of random dots, some forming the digit
+  const rows = shape.length, cols = shape[0].length;
+  for(let attempt=0; attempt<650; attempt++){
+    const r = Math.random()*180 + 10;
+    const theta = Math.random()*Math.PI*2;
+    const cx = 100 + r*Math.cos(theta)*0.98;
+    const cy = 100 + r*Math.sin(theta)*0.98;
+    if(Math.hypot(cx-100,cy-100) > 96) continue;
+    // map to grid coords to know if inside digit
+    const gx = Math.floor(((cx-10)/180)*cols);
+    const gy = Math.floor(((cy-10)/180)*rows);
+    const isFigure = shape[gy] && shape[gy][gx] === '1';
+    const radius = 2 + Math.random()*3.2;
+    const palette = isFigure ? plateDef.figureColors : plateDef.groundColors;
+    const color = palette[Math.floor(Math.random()*palette.length)];
+    dots.push(`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${radius.toFixed(1)}" fill="${color}" />`);
+  }
+  svg.innerHTML = dots.join('');
+  // answers
+  const correct = plateDef.digit;
+  const optionsSet = new Set([correct]);
+  while(optionsSet.size < 5){ optionsSet.add(String(Math.floor(Math.random()*9)+1)); }
+  const opts = Array.from(optionsSet).sort(()=>Math.random()-0.5);
+  document.getElementById('cbAnswers').innerHTML = opts.map(o => `<button onclick="answerPlate('${o}')">${o}</button>`).join('');
+  document.getElementById('cbQuestion').textContent = `Plate ${cbState.idx+1} of ${cbState.order.length} — what number do you see?`;
+}
+function answerPlate(val){
+  const plateDef = CB_PLATES[cbState.order[cbState.idx]];
+  cbState.answers.push({ correct: plateDef.digit, given: val, isCorrect: val === plateDef.digit });
+  cbState.idx++;
+  renderPlate();
+}
+function finishColorblindTest(){
+  const name = getOrAskName();
+  const correctCount = cbState.answers.filter(a=>a.isCorrect).length;
+  const total = cbState.answers.length;
+  const ratio = correctCount/total;
+  let verdict, label;
+  if(ratio >= 0.8){ verdict='good'; label='No signs of red‑green colour vision deficiency'; }
+  else if(ratio >= 0.4){ verdict='warn'; label='Possible mild red‑green colour vision deficiency'; }
+  else { verdict='warn'; label='Signs consistent with red‑green colour vision deficiency'; }
+
+  if(name){
+    ensureResultBucket(name).colorblind = { correctCount, total, label, date:new Date().toISOString() };
+    saveJSON(STORAGE_KEYS.results, results);
+  }
+  document.getElementById('cbPlate').innerHTML='';
+  document.getElementById('cbAnswers').innerHTML='';
+  document.getElementById('cbQuestion').textContent='';
+  document.querySelector('#view-colorblind .plate-wrap').style.display='none';
+  document.getElementById('cbResult').innerHTML = `
+    <div class="result-box ${verdict}">
+      <h4>${correctCount}/${total} plates read correctly</h4>
+      <p style="margin:0 0 10px 0;">${label}. This is a short screening, not a clinical diagnosis.</p>
+      <button class="btn btn-primary btn-sm" onclick="showView('booking')">Book a doctor visit</button>
+      <button class="btn btn-outline btn-sm" onclick="restartColorblind()">Retake test</button>
+    </div>`;
+}
+function restartColorblind(){
+  document.querySelector('#view-colorblind .plate-wrap').style.display='flex';
+  initColorblindTest();
+}
+
+/* ============================================================
+   HEARING TEST (Web Audio API)
+   ============================================================ */
+const HEARING_FREQS = [250,500,1000,2000,4000,8000];
+let audioCtx = null;
+let hearingState = { data: {} }; // key `${ear}-${freq}` -> 'heard'|'missed'|null
+
+function initHearingTest(){
+  hearingState.data = {};
+  const list = document.getElementById('hearingList');
+  list.innerHTML = '';
+  ['Left ear','Right ear'].forEach(earLabel => {
+    const ear = earLabel.startsWith('Left') ? 'left' : 'right';
+    HEARING_FREQS.forEach(freq => {
+      const key = ear+'-'+freq;
+      hearingState.data[key] = null;
+      const card = document.createElement('div');
+      card.className = 'freq-card';
+      card.id = 'freqcard-'+key;
+      card.innerHTML = `
+        <div>
+          <div class="meta">${earLabel} — ${freq} Hz</div>
+          <div class="sub">Tap play, then say whether you heard it</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="playTone('${ear}',${freq})">▶ Play tone</button>
+          <button class="btn btn-outline btn-sm" onclick="setHearing('${key}','heard')">I heard it</button>
+          <button class="btn btn-outline btn-sm" onclick="setHearing('${key}','missed')">Nothing</button>
+          <span class="pill wait" id="pill-${key}">Not tested</span>
+        </div>`;
+      list.appendChild(card);
+    });
+  });
+  document.getElementById('hearingSubmitBtn').disabled = true;
+  document.getElementById('hearingResult').innerHTML = '';
+}
+function playTone(ear, freq){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const panner = audioCtx.createStereoPanner ? audioCtx.createStereoPanner() : null;
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 0.05);
+    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2);
+    osc.connect(gain);
+    if(panner){ panner.pan.value = ear === 'left' ? -1 : 1; gain.connect(panner); panner.connect(audioCtx.destination); }
+    else { gain.connect(audioCtx.destination); }
+    osc.start();
+    osc.stop(audioCtx.currentTime + 1.3);
+  }catch(e){
+    alert('Your browser blocked audio playback. Click anywhere on the page first, then try again.');
+  }
+}
+function setHearing(key, val){
+  hearingState.data[key] = val;
+  const pill = document.getElementById('pill-'+key);
+  pill.className = 'pill ' + (val === 'heard' ? 'heard' : 'missed');
+  pill.textContent = val === 'heard' ? 'Heard' : 'Missed';
+  const allDone = Object.values(hearingState.data).every(v => v !== null);
+  document.getElementById('hearingSubmitBtn').disabled = !allDone;
+}
+function submitHearingTest(){
+  const name = getOrAskName();
+  if(!name) return;
+  const entries = Object.entries(hearingState.data);
+  const heardCount = entries.filter(([,v]) => v==='heard').length;
+  const total = entries.length;
+  const missedFreqs = entries.filter(([,v]) => v==='missed').map(([k])=>k);
+  const ratio = heardCount/total;
+  const verdict = ratio >= 0.85 ? 'good' : 'warn';
+  const label = ratio >= 0.85 ? 'Hearing appears within normal range' : 'Some tones were missed — a follow‑up may help';
+
+  ensureResultBucket(name).hearing = { heardCount, total, missedFreqs, label, date:new Date().toISOString() };
+  saveJSON(STORAGE_KEYS.results, results);
+
+  document.getElementById('hearingResult').innerHTML = `
+    <div class="result-box ${verdict}">
+      <h4>${heardCount}/${total} tones heard</h4>
+      <p style="margin:0 0 10px 0;">${label}.${missedFreqs.length ? ' Missed: '+missedFreqs.map(f=>f.replace('-',' ')+' Hz').join(', ') : ''}</p>
+      <button class="btn btn-primary btn-sm" onclick="showView('booking')">Book a doctor visit</button>
+    </div>`;
+}
+
+/* ============================================================
+   DOCTOR DASHBOARD
+   ============================================================ */
+let doctorLoggedIn = false;
+let slideIndex = 0;
+let patientKeys = [];
+
+function renderDoctorEntry(){
+  document.getElementById('doctorLoginPanel').classList.toggle('hidden', doctorLoggedIn);
+  document.getElementById('doctorDashboard').classList.toggle('hidden', !doctorLoggedIn);
+  if(doctorLoggedIn) renderDoctorDashboard();
+}
+function doctorLogin(){
+  const pass = document.getElementById('docPass').value;
+  if(pass === DOCTOR_PASSCODE){
+    doctorLoggedIn = true;
+    document.getElementById('docLoginError').style.display='none';
+    renderDoctorEntry();
+  } else {
+    document.getElementById('docLoginError').style.display='block';
+  }
+}
+function doctorLogout(){
+  doctorLoggedIn = false;
+  document.getElementById('docPass').value='';
+  renderDoctorEntry();
+}
+
+function buildPatientRecords(){
+  // merge appointment names + result names into one patient set
+  const names = new Set();
+  appointments.forEach(a => names.add(a.name));
+  Object.keys(results).forEach(n => names.add(n));
+  return Array.from(names).map(name => {
+    const patientAppts = appointments.filter(a => a.name === name).sort((a,b)=> (a.date+a.time) < (b.date+b.time) ? 1 : -1);
+    return { name, appts: patientAppts, tests: results[name] || {} };
+  });
+}
+
+function renderDoctorDashboard(){
+  const records = buildPatientRecords();
+  patientKeys = records.map(r => r.name);
+  document.getElementById('docPatientCount').textContent = records.length + (records.length===1 ? ' patient' : ' patients');
+
+  const listEl = document.getElementById('patientList');
+  if(records.length === 0){
+    listEl.innerHTML = '<div class="empty-state"><div class="ico">🗂️</div>No patients yet.<br>Bookings and tests will appear here.</div>';
+    document.getElementById('slideCard').innerHTML = '';
+    document.getElementById('slideDots').innerHTML = '';
+    return;
+  }
+  if(slideIndex >= records.length) slideIndex = 0;
+
+  listEl.innerHTML = records.map((r,i) => {
+    const latestAppt = r.appts[0];
+    return `<div class="item ${i===slideIndex?'active':''}" onclick="goToSlide(${i})">
+      <span class="name">${escapeHtml(r.name)}</span>
+      <span class="when">${latestAppt ? latestAppt.date+' · '+latestAppt.time : 'No appointment booked'}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('slideDots').innerHTML = records.map((_,i) => `<span class="${i===slideIndex?'on':''}"></span>`).join('');
+
+  renderSlideCard(records[slideIndex]);
+}
+
+function renderSlideCard(record){
+  const eye = record.tests.eye;
+  const cb = record.tests.colorblind;
+  const hearing = record.tests.hearing;
+  const appt = record.appts[0];
+
+  document.getElementById('slideCard').innerHTML = `
+    <h3 style="margin-bottom:2px;">${escapeHtml(record.name)}</h3>
+    <p style="margin-bottom:18px;">${record.appts.length} appointment${record.appts.length!==1?'s':''} on file</p>
+
+    ${appt ? `
+    <div class="data-block" style="margin-bottom:16px;">
+      <div class="k">Next / latest appointment</div>
+      <div class="v">${appt.date} at ${appt.time} — ${escapeHtml(appt.reason)}</div>
+      <div style="margin-top:8px; font-size:0.85rem; color:var(--ink-soft);">Ref ${appt.id}${appt.notes ? ' · "'+escapeHtml(appt.notes)+'"' : ''}</div>
+      <div class="meet-link-box" style="margin-top:10px;">
+        <code style="flex:1;">${appt.meetLink}</code>
+        <a class="btn btn-outline btn-sm" style="text-decoration:none;" href="${appt.meetLink}" target="_blank" rel="noopener">Join call</a>
+      </div>
+    </div>` : `<div class="result-box warn" style="margin-bottom:16px;"><p style="margin:0;">No appointment booked yet.</p></div>`}
+
+    <div class="data-grid">
+      <div class="data-block">
+        <div class="k">Eye test</div>
+        <div class="v">${eye ? eye.approxAcuity : 'Not taken'}</div>
+        ${eye ? `<div style="font-size:0.8rem; color:var(--ink-soft); margin-top:4px;">Eye tested: ${eye.eyeTested}</div>` : ''}
+      </div>
+      <div class="data-block">
+        <div class="k">Colourblindness</div>
+        <div class="v">${cb ? cb.correctCount+'/'+cb.total+' correct' : 'Not taken'}</div>
+        ${cb ? `<div style="font-size:0.8rem; color:var(--ink-soft); margin-top:4px;">${cb.label}</div>` : ''}
+      </div>
+      <div class="data-block" style="grid-column:1 / -1;">
+        <div class="k">Hearing test</div>
+        <div class="v">${hearing ? hearing.heardCount+'/'+hearing.total+' tones heard' : 'Not taken'}</div>
+        ${hearing && hearing.missedFreqs.length ? `<div style="font-size:0.8rem; color:var(--ink-soft); margin-top:4px;">Missed: ${hearing.missedFreqs.map(f=>f.replace('-',' ')+' Hz').join(', ')}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function goToSlide(i){ slideIndex = i; renderDoctorDashboard(); }
+function slideNext(){ slideIndex = (slideIndex+1) % Math.max(patientKeys.length,1); renderDoctorDashboard(); }
+function slidePrev(){ slideIndex = (slideIndex-1+patientKeys.length) % Math.max(patientKeys.length,1); renderDoctorDashboard(); }
+
+/* init */
+showView('home');
+</script>
+</body>
+</html>
